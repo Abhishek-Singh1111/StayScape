@@ -2,6 +2,7 @@ const mongoose  = require('mongoose');
 const Listing = require('../models/listing.js');
 const { object } = require('joi');
 const initData = require('./data.js'); 
+const dbUrl = process.env.ATLASDB_URL || 'mongodb://127.0.0.1:27017/wanderlust';
       // Connect to MongoDb
  main()
  .then(()=>{
@@ -10,7 +11,7 @@ const initData = require('./data.js');
      console.log(err);
  })
  async function main(){
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
+  await mongoose.connect(dbUrl)
    
  }
 const initDb = async () => {

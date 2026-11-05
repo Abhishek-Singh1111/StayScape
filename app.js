@@ -17,7 +17,7 @@ const path = require('path');
 const methodOverride = require('method-override');
 const session = require("express-session");
 const flash = require("connect-flash");
-
+const dbUrl = process.env.ATLASDB_URL || 'mongodb://127.0.0.1:27017/wanderlust';
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
@@ -55,25 +55,7 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
-const validateReview = (req, res, next) => {
-  let { error } = reviewSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
 
-const validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
  app.use(express.static(path.join(__dirname,"/public")));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -98,7 +80,7 @@ main()
   });
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+  await mongoose.connect(dbUrl);
 }
 
 
